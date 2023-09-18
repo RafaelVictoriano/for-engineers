@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
+
 @RequestMapping("creditos/v1/proposta")
 @RestController
 public class PropostaController {
@@ -23,12 +25,17 @@ public class PropostaController {
     @PostMapping
     public ResponseEntity<Void> post(@RequestBody CreatePropostaDTO body, UriComponentsBuilder uri) {
         final var propostaId = createPropostaService.execute(body);
-        final var uriCreated = uri.path("/creditos/v1/{propostaId}").buildAndExpand(propostaId).toUri();
+        final var uriCreated = uri.path("/creditos/v1/proposta/{propostaId}").buildAndExpand(propostaId).toUri();
         return ResponseEntity.created(uriCreated).build();
     }
 
     @GetMapping("/{propostaId}")
     public ResponseEntity<PropostaResponseDTO> get(@PathVariable("propostaId") String propostaId) {
         return ResponseEntity.ok(findPropostaService.byId(propostaId));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<PropostaResponseDTO>> get() {
+        return ResponseEntity.ok(findPropostaService.all());
     }
 }

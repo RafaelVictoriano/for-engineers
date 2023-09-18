@@ -16,6 +16,6 @@ public class PublishMessageSqsServiceImpl implements PublishMessageService {
     @Override
     public void execute(final String queueName, final Object message) {
         log.info("Publishing message:{}", message);
-        messagingTemplate.convertAndSend(message);
+        messagingTemplate.convertAndSend(queueName, message);
     }
 }

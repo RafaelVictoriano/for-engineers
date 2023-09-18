@@ -1,19 +1,23 @@
-version: '3.7'
+version: '3.0'
 
 services:
   localstack:
     container_name: localstack-foregineers
     image: localstack/localstack:latest
     environment:
-      - DEBUG=1
+      - DEBUG=0
       - USE_SSL=0
       - AWS_CBOR_DISABLE=1
+      - HOSTNAME=localstack
       - DOCKER_HOST=unix:///var/run/docker.sock
       - SERVICES=dynamodb, sqs
       - AWS_DEFAULT_REGION=us-east-1
+      - DATA_DIR=/tmp/localstack/data
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test-key
     ports:
       - '4566-4583:4566-4583'
     volumes:
-      - ${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./docker/localstack:/docker-entrypoint-initaws.d"
+      - "${LOCALSTACK_VOLUME_DIR:-./tmp/localstack}:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./docker/localstack/initaws.sh:/docker-entrypoint-initaws.d/initaws.sh"

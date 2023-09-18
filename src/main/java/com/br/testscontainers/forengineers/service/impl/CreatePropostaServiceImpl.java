@@ -28,7 +28,7 @@ public class CreatePropostaServiceImpl implements CreatePropostaService {
         log.info("Criando uma nova proposta, request:{}", createPropostaDTO);
         final var proposta = propostaMapper.toEntity(createPropostaDTO);
         propostaRepository.save(proposta);
-        publishMessageService.execute("for-engineers-queue", proposta);
+        publishMessageService.execute("proposta-queue", proposta);
         return proposta.getId();
     }
 }
